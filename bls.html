@@ -33,12 +33,13 @@ function jsonDatacall() {
 					var data2 = new Array();
 					
 						for (var i=0; i<jsonData.length; i++){
-							var temp =  JSON.stringify(jsonData[i].value);
+							var last_to_first = jsonData.length -1 -i;
+							var temp =  JSON.stringify(jsonData[last_to_first].value);
 							var temp =  temp.replace(/\"/g,' ');
-							data[i] = parseInt(temp) - 4000;
-							var temp2 = JSON.stringify(jsonData[i].period);
+							data[last_to_first] = parseInt(temp) - 4000;
+							var temp2 = JSON.stringify(jsonData[last_to_first].period);
 							var temp2 =  temp2.replace(/\"/g,' ');
-							var temp3 = JSON.stringify(jsonData[i].year);
+							var temp3 = JSON.stringify(jsonData[last_to_first].year);
 							var temp3 =  temp3.replace(/\"/g,' ');
 							
 							data2.push ( [parseInt(temp)-4000 , temp2 , temp3] );
