@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.1/jquery.min.js"></script>
+<meta charset="utf-8">
+<style>
+</style>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+
+</head>
+
+<body>
+
+
+<script>
+
+var jsonData="";
+
+function jsonDatacall() {
+    console.log("in jsonDatacall");
+  	$.ajax
+	({
+			dataType: 'json',
+			url: "http://54.186.190.151/bls",
+			success: function(response) {
+					console.log("in ajax call");
+					jsonData = response;
+					//document.write(jsonData.length);
+					//document.write('-----------------');
+					
+					var data =[];
+					var data2 = new Array();
+					
+						for (var i=0; i<jsonData.length; i++){
+							var temp =  JSON.stringify(jsonData[i].value);
+							var temp =  temp.replace(/\"/g,' ');
+							data[i] = parseInt(temp) - 4000;
+							var temp2 = JSON.stringify(jsonData[i].period);
+							var temp2 =  temp2.replace(/\"/g,' ');
+							var temp3 = JSON.stringify(jsonData[i].year);
+							var temp3 =  temp3.replace(/\"/g,' ');
+							
+							data2.push ( [parseInt(temp)-4000 , temp2 , temp3] );
+							//document.write(data2.length);
+							//document.write(data2[i][0]);
+							//document.write('-----------------');
+							
+						}
+					//var data = [4, 8, 15, 16, 23, 42];
+					//document.write(data2.length);
+					var w = 1000,
+						h = 775;
+						var barPadding = 1;
+
+					var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+					svg.selectAll("rect")
+					   .data(data2)
+					   .enter()
+					   .append("rect")
+					   .attr("x", function(d, i) {
+							return i * (w / data2.length);
+					   })
+					   .attr("y", function(d){return h-d[0];})
+					   .attr("width", w/data2.length - barPadding)
+					   .attr("height", function(d){ return d[0];})
+						.attr("fill", "steelblue");
+											
+					svg.selectAll("text1")
+					   .data(data2)
+					   .enter()
+					   .append("text")
+					   .text(function(d) {
+							return d[0]+4000;
+					   })
+						.attr("x", function(d, i) {
+							return i * (w / data2.length);
+						 })
+						 .attr("y", function(d) {
+							return h - d[0];
+						 })
+						 .attr("font-weight", "bold")
+						   .attr("font-family", "Times New Roman")
+						   .attr("font-weight", "bold")
+						   .attr("font-size", "20")
+						   .attr("fill", "red");
+						   
+					svg.selectAll("text2")
+					   .data(data2)
+					   .enter()
+					   .append("text")
+					   .text(function(d) {
+							return d[1] ;
+					   })
+						.attr("x", function(d, i) {
+							return i * (w / data2.length) + 3;
+						 })
+						 .attr("y", function(d) {
+							return h - 100 ;
+						 })
+						 .attr("font-weight", "bold")
+						   .attr("font-family", "Times New Roman")
+						   .attr("font-weight", "bold")
+						   .attr("font-size", "16")
+						   .attr("fill", "white");
+						   
+					svg.selectAll("text3")
+					   .data(data2)
+					   .enter()
+					   .append("text")
+					   .text(function(d) {
+							return d[2];
+					   })
+						.attr("x", function(d, i) {
+							return i * (w / data2.length) + 2;
+						 })
+						 .attr("y", function(d) {
+							return h - 10 ;
+						 })
+						 .attr("font-weight", "bold")
+						   .attr("font-family", "Times New Roman")
+						   .attr("font-weight", "bold")
+						   .attr("font-size", "16")
+						   .attr("fill", "yellow");
+						   
+					svg.append("text")
+						  .attr("x", 60)
+						  .attr("y", 40)
+						  .attr("id", "title")
+						  .attr("font-size", 50)
+						  .text("Job Openings and Labor Turnover Survey");
+				
+					}	
+	});
+};
+
+jsonDatacall();
+
+console.log("in main");
+	
+
+</script>
+
+</body>
+</html> 
